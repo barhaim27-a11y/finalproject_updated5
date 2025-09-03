@@ -13,3 +13,4 @@ plotly
 streamlit
 openpyxl
 reportlab
+reportlab
