@@ -227,7 +227,7 @@ with tab1:
         if os.path.exists(path):
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True) 
-        st.header("📊 Data & EDA")
+    st.header("📊 Data & EDA")
 
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
