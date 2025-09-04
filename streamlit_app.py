@@ -1179,59 +1179,145 @@ with tab_explain:
 
 # --- Tab 9: About
 with tab_about:
-    st.header("ℹ️ About This App")
-    st.markdown("""
-    ### Parkinson’s ML App
-    🧠 מערכת חכמה לניבוי מחלת פרקינסון על בסיס דאטה רפואי.
+    st.header("📖 דו\"ח סופי – פרויקט חיזוי מחלת פרקינסון")
 
-    **יכולות מרכזיות:**
-    - ניתוח EDA אינטראקטיבי  
-    - דאשבורד להשוואת מודלים  
-    - ניבוי ידני או על קבצים  
-    - אימון מחדש והשוואה למודל קיים  
-    - היסטוריית אימונים + אפשרות Rollback  
-    - ייצוא דוחות (Excel/PDF)
-
-    👨‍💻 פותח במסגרת פרויקט סיום קורס ML & AI ב־Afeka.
-    """)
-
-    if st.button("📄 Download PDF Report"):
-        from reportlab.lib.pagesizes import letter
-        from reportlab.pdfgen import canvas
-        pdf_buffer = io.BytesIO()
-        c = canvas.Canvas(pdf_buffer, pagesize=letter)
-        c.drawString(100, 750, "Parkinson’s ML Report")
-        c.drawString(100, 730, f"Rows: {df.shape[0]}, Cols: {df.shape[1]}")
-        c.save()
-        pdf_buffer.seek(0)
-        st.download_button("Download PDF", data=pdf_buffer, file_name="report.pdf", mime="application/pdf")
-        tab_about = st.tabs(["ℹ️ About"])[0]
-with tab_about:
-    st.header("ℹ️ About This Project")
-    st.markdown("""
-    🧠 **Parkinson’s ML App**  
-    Final project for ML & AI course.  
-
-    - Built with Streamlit, Scikit-learn, XGBoost, CatBoost, LightGBM.  
-    - Provides full pipeline: EDA, model comparison, prediction, retraining.  
-    - Supports multilingual interface + custom themes.  
-    - Includes demo mode and model promotion system.  
-
-    👨‍💻 Developed by: *Your Name*  
-    """)
-    
-    st.header("🚀 Conclusions")
-    with st.expander("📌 מסקנות סופיות"):
+    with st.expander("🔹 הקדמה"):
         st.markdown("""
-        1. ניתן לחזות פרקינסון בדיוק גבוה מאוד (AUC≈0.94) גם עם דאטה קטן.  
-        2. **XGBoost עם GridSearchCV** היה המודל המנצח.  
-        3. מודלי Boosting עקפו בביצועים את Logistic Regression, KNN ורשתות נוירונים.  
-        4. GridSearch תרם לשיפור Recall והפחית פספוסי חולים אמיתיים.  
-        5. Explainability (באמצעות SHAP) קריטית – מוסיפה שקיפות, אמון ותובנות קליניות.  
-        6. המערכת שבנינו היא end-to-end: Data → EDA → Models → GridSearch → Explainability → App.  
+        מחלת פרקינסון היא מחלה נוירולוגית מתקדמת המשפיעה על התנועה, 
+        אך באה לידי ביטוי גם בשינויים עדינים בקול.  
+        מטרת הפרויקט הייתה לבדוק האם ניתן להשתמש באלגוריתמים של 
+        למידת מכונה כדי לזהות חולי פרקינסון על בסיס נתוני קול בלבד.
+
+        הפרויקט כלל:
+        1. ניתוח נתונים (EDA)  
+        2. בחירת פיצ'רים רלוונטיים  
+        3. בניית מודלים שונים והשוואתם  
+        4. כוונון פרמטרים (Grid Search)  
+        5. הערכת ביצועים והשוואה  
+        6. מתן הסברים (Explainability – SHAP)  
+        7. בניית אפליקציה אינטראקטיבית  
         """)
 
+    with st.expander("🔹 שלב 1: ניתוח מקדים (EDA)"):
+        st.markdown("""
+        **למה עושים EDA?** כדי להבין את הנתונים ולזהות הבדלים בין חולים לבריאים.  
 
+        - **היסטוגרמות:** הראו שחולים בפרקינסון מציגים jitter גבוה יותר 
+          והתפלגות רחבה יותר.  
+        - **Heatmap (מפת מתאמים):** מצאנו קשרים חזקים בין חלק מהפיצ'רים 
+          (למשל jitter ו־shimmer), מה שחייב סינון פיצ'רים.  
+        - **PCA:** הצגנו את הנתונים ב־2 מימדים וראינו הפרדה בין חולים לבריאים.  
+
+        **מסקנה:** קיימים הבדלים מובהקים בנתוני הקול שיכולים לסייע לניבוי המחלה.  
+        """)
+
+    with st.expander("🔹 שלב 2: בחירת פיצ'רים"):
+        st.markdown("""
+        יותר מדי פיצ'רים יכולים להאט את המודל ולגרום ל־Overfitting.  
+        לכן השתמשנו בשיטות:
+
+        - **SelectKBest:** בחירת הפיצ'רים עם ההשפעה הסטטיסטית החזקה ביותר.  
+        - **RFE:** הסרת פיצ'רים לא תורמים באופן הדרגתי.  
+        - **VIF:** בדיקה שאין עודף מתאם בין פיצ'רים.  
+
+        **תוצאה:** שמרנו על פיצ'רים מרכזיים – jitter, shimmer ומדדי תדר (Fo).  
+        """)
+
+    with st.expander("🔹 שלב 3: המודלים שבנינו"):
+        st.markdown("""
+        **1. Logistic Regression**  
+        - מודל פשוט, מהיר וברור להבנה.  
+        - מתאים ליחסים ליניאריים בלבד.  
+        - שימש כמודל בסיס.  
+
+        **2. Random Forest**  
+        - מבוסס על הרבה עצי החלטה שמצביעים יחד.  
+        - חזק לרעש, לא דורש נירמול.  
+        - נתן Recall גבוה (גילה כמעט את כל החולים).  
+
+        **3. XGBoost**  
+        - בונה עצים אחד אחרי השני, כל עץ מתקן את טעויות הקודם.  
+        - אלגוריתם חזק מאוד, מצטיין בנתוני טבלאות.  
+        - המודל המוביל שלנו – נתן את התוצאות הגבוהות ביותר.  
+
+        **4. SVM**  
+        - מחפש "קו גבול" שמפריד בין הקבוצות.  
+        - טוב להפרדות מורכבות, פחות מתאים להרבה פיצ'רים.  
+        - נתן ביצועים טובים, אך פחות מ־XGBoost.  
+
+        **5. Neural Network (MLP)**  
+        - רשת עצבית פשוטה.  
+        - יכולה ללמוד יחסים מורכבים אך רגישה ל־Overfitting.  
+        - נתנה תוצאות קרובות ל־XGBoost אך פחות יציבות.  
+        """)
+
+    with st.expander("🔹 שלב 4: Grid Search (כוונון פרמטרים)"):
+        st.markdown("""
+        **מה זה Grid Search?**  
+        שיטה להריץ מודל שוב ושוב עם פרמטרים שונים ולבחור את הקונפיגורציה הטובה ביותר.  
+
+        **מה כיוונו:**  
+        - Logistic Regression → ערך רגולריזציה (C).  
+        - Random Forest → מספר עצים ועומק מקסימלי.  
+        - XGBoost → קצב למידה (learning_rate), עומק, subsample.  
+
+        **תוצאה:** שיפר משמעותית את הביצועים, במיוחד ב־XGBoost.  
+        """)
+
+    with st.expander("🔹 שלב 5: הערכת ביצועים וגרפים"):
+        st.markdown("""
+        **מדדים שנבדקו:**  
+        - Accuracy – שיעור ניבוי נכון.  
+        - Precision – כמה מהחיוביים שחזינו באמת חולים.  
+        - Recall – כמה מהחולים האמיתיים זוהו נכון.  
+        - F1 – איזון בין Precision ו־Recall.  
+        - ROC-AUC – עד כמה המודל יודע להפריד בין קבוצות.  
+
+        **תוצאות עיקריות:**  
+        - Logistic Regression → בסיסי, בינוני.  
+        - Random Forest → Recall גבוה (תפס כמעט את כל החולים).  
+        - XGBoost → הכי טוב בכל המדדים, ROC-AUC הגבוה ביותר.  
+        - Neural Network → קרוב ל־XGBoost אך פחות יציב.  
+
+        **גרפים והסבר:**  
+        - **ROC Curve:** הראה בבירור ש־XGBoost מוביל.  
+        - **PR Curve:** Random Forest טוב ב־Recall, XGBoost נתן איזון מצוין.  
+        - **Confusion Matrix:** Random Forest פספס מעט חולים, Logistic פספס יותר.  
+        - **Learning Curves:** Neural Network נטה ל־Overfitting, Logistic Regression התייצב מהר.  
+        """)
+
+    with st.expander("🔹 שלב 6: Explainability (הסבר המודלים)"):
+        st.markdown("""
+        מודלים כמו XGBoost נחשבים "קופסה שחורה". כדי להבין החלטות שלהם השתמשנו ב־**SHAP Values**.  
+
+        **מה גילינו:**  
+        - jitter גבוה דוחף את המודל לכיוון "חולה".  
+        - jitter נמוך → "בריא".  
+        - shimmer ותדרים גם השפיעו רבות.  
+
+        **גרפים:**  
+        - Feature Importance – jitter ו־shimmer היו הפיצ'רים החשובים ביותר.  
+        - SHAP Summary Plot – הראה איך כל פיצ'ר משפיע על ההחלטות.  
+        """)
+
+    with st.expander("🔹 שלב 7: האפליקציה (Dashboard)"):
+        st.markdown("""
+        האפליקציה נבנתה ב־Streamlit וכללה:  
+        1. **Home** – רקע כללי.  
+        2. **EDA** – גרפים וסטטיסטיקות.  
+        3. **Models** – טבלת דירוג (Leaderboard) של המודלים.  
+        4. **Prediction** – טופס להזנת נתונים או העלאת CSV.  
+        5. **Explainability** – גרפי SHAP להסבר תוצאות.  
+        6. **דו\"ח סופי** – הדו\"ח שאתה קורא עכשיו.  
+        """)
+
+    with st.expander("🔹 מסקנות"):
+        st.markdown("""
+        - ניתן לנבא פרקינסון ברמת דיוק גבוהה מנתוני קול בלבד.  
+        - **XGBoost** היה המודל החזק ביותר.  
+        - jitter ו־shimmer הוכחו כפיצ'רים הקריטיים ביותר.  
+        - האפליקציה מספקת לא רק חיזוי אלא גם הסבר – מה שמאפשר אמון רב יותר לשימוש רפואי.  
+        """)
 
 
 
