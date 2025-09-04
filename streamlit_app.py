@@ -227,11 +227,7 @@ with tab1:
         if os.path.exists(path):
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True)
-
-with tab1:
-    st.header("📊 Data & EDA")
-
-    with st.expander("📂 Dataset Overview"):
+        with st.expander("📂 Dataset Overview"):
         st.markdown("""
         - **מקור:** UCI Parkinson’s Dataset – דאטה אמין שמבוסס על מחקר קליני.  
         - **גודל:** 195 דגימות בלבד – כלומר דאטה קטן יחסית למחקר ML.  
@@ -261,6 +257,8 @@ with tab1:
 
         👉 **מסקנה:** אף על פי שמדובר בדאטה קטן, המאפיינים מספקים סיגנל ברור שמאפשר חיזוי אמין.
         """)
+
+
 
 
 # --- Tab 2: Dashboard         
