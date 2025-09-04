@@ -473,7 +473,7 @@ with tab_dash:
             y_proba = model.predict_proba(X_test)[:,1]
             prec, rec, _ = precision_recall_curve(y_test, y_proba)
             fig.add_trace(go.Scatter(x=rec, y=prec, mode="lines", name=m))
-        st.plotly_chart(fig, use_container_width=True) 
+            st.plotly_chart(fig, use_container_width=True) 
             st.header("🤖 Models & Results")
 
     with st.expander("📌 Logistic Regression"):
