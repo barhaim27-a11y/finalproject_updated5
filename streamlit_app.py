@@ -1438,8 +1438,6 @@ with tab_about:
         """)
 
 # --- Tab 10: Q&A
-tab_qa, = st.tabs(["❓ Q&A"])
-
 with tab_qa:
     st.header("❓ שאלות ותשובות נפוצות על הפרויקט")
 
