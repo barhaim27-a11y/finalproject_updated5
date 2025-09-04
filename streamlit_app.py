@@ -188,9 +188,10 @@ tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about, tab_qa
     "⚡ Train New Model",
     "🕑 Model History",
     "🧠 Explainability",
-    "ℹ️ About"
-    "❓ Q&A"
+    "ℹ️ About",
+    "❓ Q&A"   
 ])
+
 
 # --- Tab 1: Data & EDA ---
 with tab1:
