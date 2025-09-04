@@ -226,9 +226,9 @@ with tab1:
         path = os.path.join(eda_dir, filename)
         if os.path.exists(path):
             with st.expander(title, expanded=False):
-                st.image(path, use_column_width=True)
+                st.image(path, use_column_width=True) 
 
-    with st.expander("📂 Dataset Overview"):
+ with st.expander("📂 Dataset Overview"):
         st.markdown("""
         - **מקור:** UCI Parkinson’s Dataset  
         - **גודל:** 195 דגימות, 23 מאפיינים קוליים  
@@ -257,6 +257,8 @@ with tab1:
         👉 **מסקנה:** הדאטה נושא סיגנל חזק שמאפשר חיזוי אמין
         """)
 
+
+   
 
 # --- Tab 2: Dashboard         
 with tab_dash:
@@ -575,7 +577,6 @@ if st.button("📄 Download Full Report (PDF)"):
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
                        file_name="report.pdf", mime="application/pdf") 
 
-
     with st.expander("📌 Logistic Regression"):
         st.markdown("""
         - מודל ליניארי פשוט (Baseline)  
@@ -654,6 +655,8 @@ if st.button("📄 Download Full Report (PDF)"):
         - XGBoost: מתכנס יפה, יציב, ללא Overfitting חמור  
         - NeuralNet: תנודות גבוהות בגלל גודל דאטה קטן  
         """)
+
+
 
 
 # --- Tab 4: Prediction
@@ -1127,7 +1130,7 @@ with tab_explain:
                 else:
                     st.info("Feature importance not available for this model type.")
             except Exception as e:
-                st.warning(f"Explainability not available: {e}") 
+                st.warning(f"Explainability not available: {e}")  
 
     with st.expander("ℹ️ מה זה Explainability?"):
         st.markdown("""
@@ -1154,6 +1157,9 @@ with tab_explain:
         - **איתור תקלות:** ניתן לזהות אם המודל מסתמך על משתנה לא רלוונטי  
         - **מחקר:** מאפשר להבין אילו משתנים קוליים חשובים למחקר עתידי  
         """)
+        
+
+
 
 
 # --- Tab 9: About
