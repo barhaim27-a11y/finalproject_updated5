@@ -228,10 +228,6 @@ with tab1:
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True)
 
-# --- Tab: EDA ---
-with tab_eda:
-    st.header("📊 Data & EDA")
-
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
         - **מקור:** UCI Parkinson’s Dataset  
@@ -260,13 +256,6 @@ with tab_eda:
 
         👉 **מסקנה:** הדאטה נושא סיגנל חזק שמאפשר חיזוי אמין
         """)
-
-
-
-
-
-
- 
 
 
 # --- Tab 2: Dashboard         
@@ -586,9 +575,6 @@ if st.button("📄 Download Full Report (PDF)"):
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
                        file_name="report.pdf", mime="application/pdf") 
 
-# --- Tab: Models ---
-with tab_models:
-    st.header("🤖 Models & Results")
 
     with st.expander("📌 Logistic Regression"):
         st.markdown("""
@@ -643,11 +629,6 @@ with tab_models:
         - **תוצאה:** ROC-AUC ≈ 0.87  
         - **חיסרון:** חוסר יציבות בגלל דאטה קטן, לא עקף Boosting  
         """)
-
-
-# --- Tab: Graphs ---
-with tab_graphs:
-    st.header("📈 Graphs & Insights")
 
     with st.expander("🟦 Confusion Matrix"):
         st.markdown("""
@@ -1147,8 +1128,6 @@ with tab_explain:
                     st.info("Feature importance not available for this model type.")
             except Exception as e:
                 st.warning(f"Explainability not available: {e}") 
-with tab_explain:
-    st.header("🔎 Explainability (SHAP)")
 
     with st.expander("ℹ️ מה זה Explainability?"):
         st.markdown("""
