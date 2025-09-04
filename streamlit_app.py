@@ -179,7 +179,7 @@ st.sidebar.markdown(f"🕒 **Model Last Updated:** {last_updated}")
 # ==============================
 # Tabs
 # ==============================
-tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about, tab_10 = st.tabs([
+tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about, tab_qa = st.tabs([
     "📊 Data & EDA", 
     "📈 Dashboard",
     "🤖 Models", 
