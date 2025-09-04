@@ -227,47 +227,41 @@ with tab1:
         if os.path.exists(path):
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True) 
-
-with tab1:
-    st.header("📊 Data & EDA")
+        st.header("📊 Data & EDA")
 
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
-        - **מקור:** UCI Parkinson’s Dataset – דאטה אמין שמבוסס על מחקר קליני.  
-        - **גודל:** 195 דגימות בלבד – כלומר דאטה קטן יחסית למחקר ML.  
-        - **עמודת יעד:** `status` – 0 = בריא, 1 = חולה פרקינסון.  
-        - **בעיה מרכזית:** חוסר איזון – 75% חולים מול 25% בריאים.  
+        הדאטה שלנו מגיע מ־**UCI Parkinson’s Dataset** – מאגר מחקרי מבוסס ומוכר.  
+        יש בו **195 דגימות** בלבד, עם **23 מאפיינים קוליים** שנמדדו מנבדקים (חולים ובריאים).  
 
-        ⚠️ המשמעות: Accuracy לבדו לא מדד טוב כאן → מודל יכול לנבא "חולה" תמיד ולקבל דיוק גבוה.  
-        לכן נדרשים מדדים נוספים: Recall, Precision, F1, ROC-AUC.
+        - **עמודת יעד:** `status` (0=בריא, 1=חולה).  
+        - **אתגר מרכזי:** חוסר איזון – כ־75% מהדגימות הן של חולים ורק כ־25% של בריאים.  
+
+        ⚠️ המשמעות: מודל נאיבי שמנבא תמיד "חולה" ישיג Accuracy גבוה – אבל לא באמת יהיה שימושי.  
+        לכן החלטנו להסתמך גם על מדדים מתקדמים יותר: **Recall, Precision, F1, ROC-AUC**.
         """)
 
     with st.expander("🔎 Key Features"):
         st.markdown("""
-        - **Jitter** – שונות קטנה בתדר הקול. אצל חולים התדר רועד יותר.  
-        - **Shimmer** – שונות בעוצמת הקול. אצל חולים יש חוסר יציבות גבוה.  
-        - **Fo (Fundamental Frequency)** – התדר הבסיסי של הדיבור. אצל חולים פחות יציב.  
-        - **NHR (Noise-to-Harmonics Ratio)** – מדד לכמות רעש ביחס להרמוניות. אצל חולים הערך גבוה.  
+        - **Jitter** – שונות קטנה בתדר הדיבור; אצל חולים יש רעידות חזקות יותר.  
+        - **Shimmer** – שונות בעוצמת הקול; אצל חולים נצפתה חוסר יציבות גבוה.  
+        - **Fo (Fundamental Frequency)** – התדר הבסיסי; אצל חולים פחות יציב.  
+        - **NHR (Noise-to-Harmonics Ratio)** – יחס רעש להרמוניות; אצל חולים הערכים גבוהים יותר.  
 
-        📌 משתנים אלו ידועים בספרות המדעית כסמנים מוקדמים לפרקינסון – זה נותן אמון באיכות הדאטה.
+        📌 אלו משתנים שנבדקו רבות במחקר קליני והם סמנים מוכרים לפרקינסון – חיזוק לכך שהדאטה איכותי.
         """)
 
     with st.expander("📊 EDA Findings"):
         st.markdown("""
-        - **Heatmap:** הראה מתאם גבוה בין jitter/shimmer לסטטוס המחלה.  
-        - **PCA:** בהקרנה ל־2D עדיין ניתן להבדיל בין חולים לבריאים → סימן למידע חזק.  
-        - **t-SNE:** הראה אשכולות ברורים – קבוצה מובחנת של חולים.  
-        - **Violin + Histogram:** jitter ו־shimmer מראים שונות בולטת בין בריאים לחולים.  
+        - **Heatmap:** מצאנו קשר מובהק בין jitter/shimmer לבין מצב המחלה.  
+        - **PCA:** גם כשצמצמנו ל־2 רכיבים בלבד, עדיין נראתה הפרדה טובה בין חולים לבריאים.  
+        - **t-SNE:** הראה אשכולות ברורים – חולים מתרכזים באזור מוגדר.  
+        - **Violin + Histogram:** jitter ו־shimmer בעלי שונות גבוהה מאוד אצל חולים לעומת בריאים.  
 
-        👉 **מסקנה:** אף על פי שמדובר בדאטה קטן, המאפיינים מספקים סיגנל ברור שמאפשר חיזוי אמין.
+        👉 **מסקנה:** למרות גודל הדאטה הקטן, הסיגנל חזק מאוד – מה שאפשר לנו להמשיך בביטחון לבניית מודלים.
         """)
-
-
-
-
-
-   
-
+    
+                
 # --- Tab 2: Dashboard         
 with tab_dash:
     st.header("📈 Interactive Dashboard – Compare Models")
@@ -475,74 +469,72 @@ with tab_dash:
             y_proba = model.predict_proba(X_test)[:,1]
             prec, rec, _ = precision_recall_curve(y_test, y_proba)
             fig.add_trace(go.Scatter(x=rec, y=prec, mode="lines", name=m))
-        st.plotly_chart(fig, use_container_width=True)
-
-with tab2:
-    st.header("🤖 Models & Results")
+        st.plotly_chart(fig, use_container_width=True) 
+            st.header("🤖 Models & Results")
 
     with st.expander("📌 Logistic Regression"):
         st.markdown("""
-        - מודל סטטיסטי פשוט, קו בסיסי להשוואה.  
-        - **תוצאה:** ROC-AUC ≈ 0.85.  
-        - **בעיה:** הרבה False Positives – מסמן בריאים כחולים.  
-        - **מסקנה:** טוב כקו בסיס אך לא מתאים לשימוש רפואי.  
+        מודל ליניארי פשוט שמשמש כקו בסיס.  
+        - **תוצאה אצלנו:** ROC-AUC ≈ 0.85.  
+        - **בעיה:** הרבה False Positives (בריאים שזוהו כחולים).  
+        - **מסקנה:** לא מתאים לשימוש רפואי, אבל טוב כבסיס להשוואה.  
         """)
 
     with st.expander("🌲 Random Forest"):
         st.markdown("""
-        - Ensemble של עצי החלטה – מצביעים יחד על התוצאה.  
+        Ensemble של עצי החלטה – כל עץ "מצביע" על תחזית סופית.  
         - **תוצאה:** ROC-AUC ≈ 0.90.  
-        - **GridSearchCV:** פרמטרים כמו `n_estimators`, `max_depth` שופרו.  
-        - **יתרון:** יציב, נותן גם Feature Importance.  
-        - **חיסרון:** פחות חד לעומת boosting.  
+        - GridSearchCV שיפר פרמטרים כמו `n_estimators`, `max_depth`.  
+        - **יתרון:** יציב ומסביר (Feature Importance).  
+        - **חיסרון:** פחות חד בהשוואה ל־boosting.  
         """)
 
     with st.expander("⚡ SVM"):
         st.markdown("""
-        - מחפש את המפריד הטוב ביותר בין הקבוצות (Support Vectors).  
-        - **תוצאה:** ROC-AUC ≈ 0.88.  
-        - **יתרון:** מצוין לדאטה קטן.  
-        - **חיסרון:** לא תמיד גמיש בקשרים מורכבים.  
+        מודל שמחפש את המפריד הטוב ביותר בין הקבוצות עם "מרווח מקסימלי".  
+        - **תוצאה אצלנו:** ROC-AUC ≈ 0.88.  
+        - **יתרון:** מצוין בדאטה קטן.  
+        - **חיסרון:** מתקשה במבנים מורכבים.  
         """)
 
     with st.expander("👥 KNN"):
         st.markdown("""
-        - מסווג לפי רוב קרוביו (k-nearest neighbors).  
-        - **תוצאה:** ROC-AUC ≈ 0.82 – הכי חלש אצלנו.  
-        - **חסרון:** רגיש מאוד לרעש, תלוי בגודל הדאטה.  
-        - **מסקנה:** פחות מתאים לבעיה זו.  
+        מסווג דגימה חדשה לפי קרבתה לשכנים הקרובים ביותר.  
+        - **תוצאה:** ROC-AUC ≈ 0.82 (החלש ביותר).  
+        - **חיסרון:** רגיש מאוד לרעש ודאטה קטן.  
+        - **מסקנה:** לא מתאים לבעיה זו.  
         """)
 
     with st.expander("⭐ XGBoost"):
         st.markdown("""
-        - Gradient Boosting מהחזקים בעולם ה־ML.  
-        - **תוצאה:** ROC-AUC ≈ 0.94 → **המודל המנצח**.  
-        - **GridSearchCV:** אופטימיזציה ל־`learning_rate`, `max_depth`, `subsample`.  
+        אלגוריתם Gradient Boosting מהחזקים ביותר.  
+        - **תוצאה:** ROC-AUC ≈ 0.94 → המודל המנצח.  
+        - GridSearchCV שיפר `learning_rate`, `max_depth`, `subsample`.  
         - **יתרון קריטי:** כמעט ואין False Negatives → לא מפספס חולים אמיתיים.  
         """)
 
     with st.expander("🚀 LightGBM"):
         st.markdown("""
-        - גרסה יעילה של boosting.  
+        גרסה יעילה ומהירה של boosting.  
         - **תוצאה:** ROC-AUC ≈ 0.93.  
-        - מהיר מאוד ומתאים לדאטה גדול יותר.  
         """)
 
     with st.expander("🐱 CatBoost"):
         st.markdown("""
-        - מותאם לדאטה לא מאוזן (כמו שלנו).  
+        מותאם במיוחד לדאטה לא מאוזן כמו שלנו.  
         - **תוצאה:** ROC-AUC ≈ 0.93.  
-        - מגדיר אוטומטית פרמטרים אופטימליים.  
         """)
 
     with st.expander("🧠 NeuralNet (MLP)"):
         st.markdown("""
-        - רשת נוירונים פשוטה עם שכבות מלאות.  
+        רשת נוירונים עם שכבות מלאות.  
         - **תוצאה:** ROC-AUC ≈ 0.87.  
-        - **בעיה:** דאטה קטן → לא יציב, לא עקף boosting.  
-        - **מסקנה:** שיטה חזקה תאורטית, אבל לא מיטבית בדאטה שלנו.  
+        - **בעיה:** דאטה קטן → רשת לא יציבה ולא עקפה boosting.  
         """)
+        
 
+
+        
 
 # --- Tab 3: Models
 with tab2:
@@ -651,35 +643,32 @@ if st.button("📄 Download Full Report (PDF)"):
     c.save()
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
                        file_name="report.pdf", mime="application/pdf") 
-
-with tab3:
-    st.header("📈 Graphs & Insights")
+        st.header("📈 Graphs & Insights")
 
     with st.expander("🟦 Confusion Matrix"):
         st.markdown("""
-        - **XGBoost:** כמעט לא פספס חולים אמיתיים (מעט False Negatives).  
-        - **Logistic Regression:** ייצר הרבה False Positives → התרעות שווא.  
-        - 📌 רפואית: עדיף שיהיו False Positives מאשר לפספס חולה אמיתי.  
+        - **XGBoost:** כמעט ולא פספס חולים אמיתיים (מעט מאוד False Negatives).  
+        - **Logistic Regression:** הרבה False Positives (התרעות שווא).  
+        📌 רפואית: עדיף שיהיו False Positives מאשר לפספס חולה אמיתי.  
         """)
 
     with st.expander("📉 ROC Curves"):
         st.markdown("""
-        - **Boosting Models (XGBoost, LightGBM, CatBoost):** AUC גבוה מאוד, קימור חד וברור.  
-        - **Logistic Regression:** עקומה שטוחה יותר, קרוב יותר לאלכסון → דיוק נמוך יותר.  
+        - **Boosting Models (XGBoost, LightGBM, CatBoost):** עקומות חדות מאוד, AUC גבוה.  
+        - **Logistic Regression:** פחות מדויק, קרוב יותר לאלכסון.  
         """)
 
     with st.expander("📊 Precision-Recall Curves"):
         st.markdown("""
         - **Boosting:** שמרו על Precision גבוה גם כאשר Recall עלה.  
-        - **KNN:** נפל במהירות → לא שומר על איזון בין Recall ל־Precision.  
+        - **KNN:** קרס במהירות → לא שמר על איזון.  
         """)
 
     with st.expander("📈 Learning Curve"):
         st.markdown("""
-        - **XGBoost:** מתכנס יפה, יציב, אין Overfitting חריג.  
-        - **NeuralNet:** תנודתי מאוד, מושפע מגודל הדאטה הקטן.  
+        - **XGBoost:** מתכנס בצורה יציבה, ללא Overfitting חמור.  
+        - **NeuralNet:** תנודתי מאוד, רגיש לגודל הדאטה הקטן.  
         """)
-
 
 
 # --- Tab 4: Prediction
@@ -1154,37 +1143,34 @@ with tab_explain:
                     st.info("Feature importance not available for this model type.")
             except Exception as e:
                 st.warning(f"Explainability not available: {e}")  
-
-with tab8:
-    st.header("🔎 Explainability (SHAP)")
+            st.header("🔎 Explainability (SHAP)")
 
     with st.expander("ℹ️ מה זה Explainability?"):
         st.markdown("""
-        - תחום שבודק איך ולמה מודל קיבל החלטות.  
-        - ברפואה זה חיוני – אי אפשר להסתמך על "קופסה שחורה".  
+        תחום הבוחן איך מודלים מקבלים החלטות.  
+        ברפואה – שקיפות קריטית: רופא חייב לדעת למה המערכת אמרה "חולה".  
         """)
 
     with st.expander("⚙️ הכלי – SHAP"):
         st.markdown("""
-        - מבוסס על Shapley values (מתורת המשחקים).  
-        - מחשב את התרומה של כל משתנה לכל תחזית.  
-        - מסביר לא רק מה חשוב, אלא גם אם תרם לניבוי חיובי או שלילי.  
+        - מבוסס על Shapley values (תורת המשחקים).  
+        - מחשב את התרומה של כל משתנה לחיזוי.  
+        - נותן גם סדר חשיבות וגם אם התרומה חיובית או שלילית.  
         """)
 
     with st.expander("📊 ממצאים אצלנו"):
         st.markdown("""
-        - המאפיינים החשובים ביותר: **Jitter, Shimmer, Fo, NHR**.  
-        - מחזק ידע קליני: חוסר יציבות קולית ונוכחות רעש הם סמנים למחלה.  
+        - משתנים קריטיים: **Jitter, Shimmer, Fo, NHR**.  
+        - זה תואם ידע קליני ידוע: חוסר יציבות קולית = סממן לפרקינסון.  
         """)
 
     with st.expander("💡 למה זה חשוב?"):
         st.markdown("""
-        - **אמון רפואי:** מאפשר לרופא להבין את החלטת המערכת.  
-        - **איתור תקלות:** אם המודל היה מתבסס על משתנים לא נכונים – היינו מגלים.  
-        - **מדע:** נותן בסיס למחקר עתידי על סמנים קוליים.  
+        - **אמון רפואי:** רופא מבין למה התקבלה החלטה.  
+        - **איתור תקלות:** אם המודל משתמש במאפיינים לא נכונים – נגלה.  
+        - **תובנות מחקריות:** מאפשר להבין מהם הסמנים החשובים ביותר למחקר עתידי.  
         """)
-
-
+        
 
 
 # --- Tab 9: About
@@ -1229,20 +1215,17 @@ with tab_about:
 
     👨‍💻 Developed by: *Your Name*  
     """)
-
-with tab9:
     st.header("🚀 Conclusions")
 
     with st.expander("📌 מסקנות סופיות"):
         st.markdown("""
-        1. ניתן לחזות פרקינסון בדיוק גבוה (AUC≈0.94) גם מדאטה קטן.  
-        2. **XGBoost עם GridSearchCV** הוא המודל המנצח.  
-        3. Boosting עדיפים על Logistic Regression, KNN ורשתות נוירונים.  
-        4. GridSearch שיפר Recall והפחית פספוסי חולים אמיתיים.  
-        5. Explainability (SHAP) קריטית – מוסיפה שקיפות, אמון ותובנות קליניות.  
-        6. הפרויקט מדגים תהליך end-to-end: Data → EDA → Models → GridSearch → App.  
+        1. ניתן לחזות פרקינסון בדיוק גבוה מאוד (AUC≈0.94) גם עם דאטה קטן.  
+        2. **XGBoost עם GridSearchCV** היה המודל המנצח.  
+        3. מודלי Boosting עקפו בביצועים את Logistic Regression, KNN ורשתות נוירונים.  
+        4. GridSearch תרם לשיפור Recall והפחית פספוסי חולים אמיתיים.  
+        5. Explainability (באמצעות SHAP) קריטית – מוסיפה שקיפות, אמון ותובנות קליניות.  
+        6. המערכת שבנינו היא end-to-end: Data → EDA → Models → GridSearch → Explainability → App.  
         """)
-
 
 
 
