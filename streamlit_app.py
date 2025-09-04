@@ -194,6 +194,13 @@ tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about = st.ta
 # --- Tab 1: Data & EDA ---
 with tab1:
     st.header("📊 Data & Exploratory Data Analysis")
+    st.header("📊 Data & EDA")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        בלשונית זו מוצג ניתוח הנתונים הגולמיים (EDA).  
+        תוכלו לראות התפלגויות, סטטיסטיקות בסיסיות, מתאמים (Heatmap), 
+        ו-PCA שמראה כיצד ניתן להבחין בין חולים לבריאים.
+        """)
 
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
