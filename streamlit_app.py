@@ -228,36 +228,42 @@ with tab1:
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True)
 
-       with st.expander("📂 Dataset Overview"):
-        st.markdown("""
-        - **מקור:** UCI Parkinson’s Dataset – דאטה אמין שמבוסס על מחקר קליני.  
-        - **גודל:** 195 דגימות בלבד – כלומר דאטה קטן יחסית למחקר ML.  
-        - **עמודת יעד:** `status` – 0 = בריא, 1 = חולה פרקינסון.  
-        - **בעיה מרכזית:** חוסר איזון – 75% חולים מול 25% בריאים.  
+# --- Tab: EDA ---
+with tab_eda:
+    st.header("📊 Data & EDA")
 
-        ⚠️ המשמעות: Accuracy לבדו לא מדד טוב כאן → מודל יכול לנבא "חולה" תמיד ולקבל דיוק גבוה.  
-        לכן נדרשים מדדים נוספים: Recall, Precision, F1, ROC-AUC.
+    with st.expander("📂 Dataset Overview"):
+        st.markdown("""
+        - **מקור:** UCI Parkinson’s Dataset  
+        - **גודל:** 195 דגימות, 23 מאפיינים קוליים  
+        - **עמודת יעד:** `status` (0=בריא, 1=חולה)  
+        - **בעיה מרכזית:** חוסר איזון (75% חולים, 25% בריאים)  
+        ❗ המשמעות: Accuracy לבדו לא מספיק, צריך גם Recall ו־ROC-AUC
         """)
 
     with st.expander("🔎 Key Features"):
         st.markdown("""
-        - **Jitter** – שונות קטנה בתדר הקול. אצל חולים התדר רועד יותר.  
-        - **Shimmer** – שונות בעוצמת הקול. אצל חולים יש חוסר יציבות גבוה.  
-        - **Fo (Fundamental Frequency)** – התדר הבסיסי של הדיבור. אצל חולים פחות יציב.  
-        - **NHR (Noise-to-Harmonics Ratio)** – מדד לכמות רעש ביחס להרמוניות. אצל חולים הערך גבוה.  
+        - **Jitter** – שונות בתדר הקול (רעידות קול)  
+        - **Shimmer** – שונות בעוצמת הקול  
+        - **Fo (Fundamental Frequency)** – התדר הבסיסי של הדיבור  
+        - **NHR (Noise-to-Harmonics Ratio)** – יחס רעש להרמוניות  
 
-        📌 משתנים אלו ידועים בספרות המדעית כסמנים מוקדמים לפרקינסון – זה נותן אמון באיכות הדאטה.
+        📌 מאפיינים אלה ידועים כסמנים מוקדמים לפרקינסון
         """)
 
     with st.expander("📊 EDA Findings"):
         st.markdown("""
-        - **Heatmap:** הראה מתאם גבוה בין jitter/shimmer לסטטוס המחלה.  
-        - **PCA:** בהקרנה ל־2D עדיין ניתן להבדיל בין חולים לבריאים → סימן למידע חזק.  
-        - **t-SNE:** הראה אשכולות ברורים – קבוצה מובחנת של חולים.  
-        - **Violin + Histogram:** jitter ו־shimmer מראים שונות בולטת בין בריאים לחולים.  
+        - **Heatmap:** קשר חזק בין jitter/shimmer למחלה  
+        - **PCA:** גם בהקרנה דו־ממדית יש הפרדה טובה בין חולים לבריאים  
+        - **t-SNE:** אישש אשכולות ברורים של חולים מול בריאים  
+        - **Violin Plots:** הבדלים מובהקים בהתפלגות jitter ו־shimmer  
 
-        👉 **מסקנה:** אף על פי שמדובר בדאטה קטן, המאפיינים מספקים סיגנל ברור שמאפשר חיזוי אמין.
+        👉 **מסקנה:** הדאטה נושא סיגנל חזק שמאפשר חיזוי אמין
         """)
+
+
+
+
 
 
  
@@ -578,7 +584,96 @@ if st.button("📄 Download Full Report (PDF)"):
 
     c.save()
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
-                       file_name="report.pdf", mime="application/pdf")
+                       file_name="report.pdf", mime="application/pdf") 
+
+# --- Tab: Models ---
+with tab_models:
+    st.header("🤖 Models & Results")
+
+    with st.expander("📌 Logistic Regression"):
+        st.markdown("""
+        - מודל ליניארי פשוט (Baseline)  
+        - **תוצאה:** ROC-AUC ≈ 0.85  
+        - **חסרון:** הרבה False Positives → מסמן בריאים כחולים  
+        """)
+
+    with st.expander("🌲 Random Forest"):
+        st.markdown("""
+        - Ensemble של עצים לא ליניאריים  
+        - **תוצאה:** ROC-AUC ≈ 0.90  
+        - **GridSearchCV:** שיפרנו n_estimators ו־max_depth  
+        """)
+
+    with st.expander("⚡ SVM"):
+        st.markdown("""
+        - עובד מצוין בדאטה קטן  
+        - **תוצאה:** ROC-AUC ≈ 0.88  
+        """)
+
+    with st.expander("👥 KNN"):
+        st.markdown("""
+        - מסווג לפי קרבה בין דגימות  
+        - **תוצאה:** ROC-AUC ≈ 0.82 (החלש ביותר)  
+        - **חיסרון:** רגיש לרעש  
+        """)
+
+    with st.expander("⭐ XGBoost"):
+        st.markdown("""
+        - Gradient Boosting מתקדם  
+        - **תוצאה:** ROC-AUC ≈ 0.94 → **המודל המנצח**  
+        - **GridSearchCV:** שיפרנו learning_rate, max_depth, subsample  
+        - **יתרון קריטי:** כמעט ואין False Negatives → לא מפספס חולים אמיתיים  
+        """)
+
+    with st.expander("🚀 LightGBM"):
+        st.markdown("""
+        - Boosting מהיר ויעיל  
+        - **תוצאה:** ROC-AUC ≈ 0.93  
+        """)
+
+    with st.expander("🐱 CatBoost"):
+        st.markdown("""
+        - מותאם במיוחד לנתונים לא מאוזנים  
+        - **תוצאה:** ROC-AUC ≈ 0.93  
+        """)
+
+    with st.expander("🧠 NeuralNet (MLP)"):
+        st.markdown("""
+        - רשת נוירונים בסיסית  
+        - **תוצאה:** ROC-AUC ≈ 0.87  
+        - **חיסרון:** חוסר יציבות בגלל דאטה קטן, לא עקף Boosting  
+        """)
+
+
+# --- Tab: Graphs ---
+with tab_graphs:
+    st.header("📈 Graphs & Insights")
+
+    with st.expander("🟦 Confusion Matrix"):
+        st.markdown("""
+        - **XGBoost:** כמעט ולא פספס חולים (מעט מאוד False Negatives)  
+        - **Logistic Regression:** הרבה False Positives → התרעות שווא  
+        - 📌 רפואית: עדיף False Positives מאשר לפספס חולה אמיתי  
+        """)
+
+    with st.expander("📉 ROC Curves"):
+        st.markdown("""
+        - Boosting Models (XGBoost, LightGBM, CatBoost) → AUC גבוה מאוד  
+        - Logistic Regression → קרוב לאלכסון → חלש יחסית  
+        """)
+
+    with st.expander("📊 Precision-Recall Curves"):
+        st.markdown("""
+        - Boosting: שומרים על Precision גבוה גם ב־Recall גבוה  
+        - KNN: נופל מהר מאוד → לא מתאים  
+        """)
+
+    with st.expander("📈 Learning Curve"):
+        st.markdown("""
+        - XGBoost: מתכנס יפה, יציב, ללא Overfitting חמור  
+        - NeuralNet: תנודות גבוהות בגלל גודל דאטה קטן  
+        """)
+
 
 # --- Tab 4: Prediction
 with tab3:
@@ -1051,7 +1146,35 @@ with tab_explain:
                 else:
                     st.info("Feature importance not available for this model type.")
             except Exception as e:
-                st.warning(f"Explainability not available: {e}")
+                st.warning(f"Explainability not available: {e}") 
+with tab_explain:
+    st.header("🔎 Explainability (SHAP)")
+
+    with st.expander("ℹ️ מה זה Explainability?"):
+        st.markdown("""
+        - היכולת להסביר איך מודל מקבל החלטות  
+        - קריטי במיוחד ברפואה – שקיפות ואמון חיוניים  
+        """)
+
+    with st.expander("⚙️ הכלי – SHAP"):
+        st.markdown("""
+        - מחשב את התרומה של כל משתנה לניבוי  
+        - מבוסס על תורת המשחקים (Shapley Values)  
+        - נותן סדר חשיבות וכיוון (חיובי/שלילי)  
+        """)
+
+    with st.expander("📊 ממצאים אצלנו"):
+        st.markdown("""
+        - המאפיינים הקריטיים ביותר: **Jitter, Shimmer, Fo, NHR**  
+        - מאמת ידע קליני: חוסר יציבות בקול ורעש גבוה הם סממנים מובהקים לפרקינסון  
+        """)
+
+    with st.expander("💡 למה זה חשוב?"):
+        st.markdown("""
+        - **אמון רפואי:** רופא מבין למה התקבלה ההחלטה  
+        - **איתור תקלות:** ניתן לזהות אם המודל מסתמך על משתנה לא רלוונטי  
+        - **מחקר:** מאפשר להבין אילו משתנים קוליים חשובים למחקר עתידי  
+        """)
 
 
 # --- Tab 9: About
@@ -1097,161 +1220,6 @@ with tab_about:
     👨‍💻 Developed by: *Your Name*  
     """)
 
-# --- Tab: EDA ---
-with tab_eda:
-    st.header("📊 Data & EDA")
-
-    with st.expander("📂 Dataset Overview"):
-        st.markdown("""
-        - **מקור:** UCI Parkinson’s Dataset  
-        - **גודל:** 195 דגימות, 23 מאפיינים קוליים  
-        - **עמודת יעד:** `status` (0=בריא, 1=חולה)  
-        - **בעיה מרכזית:** חוסר איזון (75% חולים, 25% בריאים)  
-        ❗ המשמעות: Accuracy לבדו לא מספיק, צריך גם Recall ו־ROC-AUC
-        """)
-
-    with st.expander("🔎 Key Features"):
-        st.markdown("""
-        - **Jitter** – שונות בתדר הקול (רעידות קול)  
-        - **Shimmer** – שונות בעוצמת הקול  
-        - **Fo (Fundamental Frequency)** – התדר הבסיסי של הדיבור  
-        - **NHR (Noise-to-Harmonics Ratio)** – יחס רעש להרמוניות  
-
-        📌 מאפיינים אלה ידועים כסמנים מוקדמים לפרקינסון
-        """)
-
-    with st.expander("📊 EDA Findings"):
-        st.markdown("""
-        - **Heatmap:** קשר חזק בין jitter/shimmer למחלה  
-        - **PCA:** גם בהקרנה דו־ממדית יש הפרדה טובה בין חולים לבריאים  
-        - **t-SNE:** אישש אשכולות ברורים של חולים מול בריאים  
-        - **Violin Plots:** הבדלים מובהקים בהתפלגות jitter ו־shimmer  
-
-        👉 **מסקנה:** הדאטה נושא סיגנל חזק שמאפשר חיזוי אמין
-        """)
-
-
-# --- Tab: Models ---
-with tab_models:
-    st.header("🤖 Models & Results")
-
-    with st.expander("📌 Logistic Regression"):
-        st.markdown("""
-        - מודל ליניארי פשוט (Baseline)  
-        - **תוצאה:** ROC-AUC ≈ 0.85  
-        - **חסרון:** הרבה False Positives → מסמן בריאים כחולים  
-        """)
-
-    with st.expander("🌲 Random Forest"):
-        st.markdown("""
-        - Ensemble של עצים לא ליניאריים  
-        - **תוצאה:** ROC-AUC ≈ 0.90  
-        - **GridSearchCV:** שיפרנו n_estimators ו־max_depth  
-        """)
-
-    with st.expander("⚡ SVM"):
-        st.markdown("""
-        - עובד מצוין בדאטה קטן  
-        - **תוצאה:** ROC-AUC ≈ 0.88  
-        """)
-
-    with st.expander("👥 KNN"):
-        st.markdown("""
-        - מסווג לפי קרבה בין דגימות  
-        - **תוצאה:** ROC-AUC ≈ 0.82 (החלש ביותר)  
-        - **חיסרון:** רגיש לרעש  
-        """)
-
-    with st.expander("⭐ XGBoost"):
-        st.markdown("""
-        - Gradient Boosting מתקדם  
-        - **תוצאה:** ROC-AUC ≈ 0.94 → **המודל המנצח**  
-        - **GridSearchCV:** שיפרנו learning_rate, max_depth, subsample  
-        - **יתרון קריטי:** כמעט ואין False Negatives → לא מפספס חולים אמיתיים  
-        """)
-
-    with st.expander("🚀 LightGBM"):
-        st.markdown("""
-        - Boosting מהיר ויעיל  
-        - **תוצאה:** ROC-AUC ≈ 0.93  
-        """)
-
-    with st.expander("🐱 CatBoost"):
-        st.markdown("""
-        - מותאם במיוחד לנתונים לא מאוזנים  
-        - **תוצאה:** ROC-AUC ≈ 0.93  
-        """)
-
-    with st.expander("🧠 NeuralNet (MLP)"):
-        st.markdown("""
-        - רשת נוירונים בסיסית  
-        - **תוצאה:** ROC-AUC ≈ 0.87  
-        - **חיסרון:** חוסר יציבות בגלל דאטה קטן, לא עקף Boosting  
-        """)
-
-
-# --- Tab: Graphs ---
-with tab_graphs:
-    st.header("📈 Graphs & Insights")
-
-    with st.expander("🟦 Confusion Matrix"):
-        st.markdown("""
-        - **XGBoost:** כמעט ולא פספס חולים (מעט מאוד False Negatives)  
-        - **Logistic Regression:** הרבה False Positives → התרעות שווא  
-        - 📌 רפואית: עדיף False Positives מאשר לפספס חולה אמיתי  
-        """)
-
-    with st.expander("📉 ROC Curves"):
-        st.markdown("""
-        - Boosting Models (XGBoost, LightGBM, CatBoost) → AUC גבוה מאוד  
-        - Logistic Regression → קרוב לאלכסון → חלש יחסית  
-        """)
-
-    with st.expander("📊 Precision-Recall Curves"):
-        st.markdown("""
-        - Boosting: שומרים על Precision גבוה גם ב־Recall גבוה  
-        - KNN: נופל מהר מאוד → לא מתאים  
-        """)
-
-    with st.expander("📈 Learning Curve"):
-        st.markdown("""
-        - XGBoost: מתכנס יפה, יציב, ללא Overfitting חמור  
-        - NeuralNet: תנודות גבוהות בגלל גודל דאטה קטן  
-        """)
-
-
-# --- Tab: Explainability ---
-with tab_explain:
-    st.header("🔎 Explainability (SHAP)")
-
-    with st.expander("ℹ️ מה זה Explainability?"):
-        st.markdown("""
-        - היכולת להסביר איך מודל מקבל החלטות  
-        - קריטי במיוחד ברפואה – שקיפות ואמון חיוניים  
-        """)
-
-    with st.expander("⚙️ הכלי – SHAP"):
-        st.markdown("""
-        - מחשב את התרומה של כל משתנה לניבוי  
-        - מבוסס על תורת המשחקים (Shapley Values)  
-        - נותן סדר חשיבות וכיוון (חיובי/שלילי)  
-        """)
-
-    with st.expander("📊 ממצאים אצלנו"):
-        st.markdown("""
-        - המאפיינים הקריטיים ביותר: **Jitter, Shimmer, Fo, NHR**  
-        - מאמת ידע קליני: חוסר יציבות בקול ורעש גבוה הם סממנים מובהקים לפרקינסון  
-        """)
-
-    with st.expander("💡 למה זה חשוב?"):
-        st.markdown("""
-        - **אמון רפואי:** רופא מבין למה התקבלה ההחלטה  
-        - **איתור תקלות:** ניתן לזהות אם המודל מסתמך על משתנה לא רלוונטי  
-        - **מחקר:** מאפשר להבין אילו משתנים קוליים חשובים למחקר עתידי  
-        """)
-
-
-# --- Tab: Conclusions ---
 with tab_conclusions:
     st.header("🚀 Conclusions")
 
@@ -1264,5 +1232,13 @@ with tab_conclusions:
         5. Explainability (SHAP) קריטית – מוסיפה שקיפות, אמון ותובנות רפואיות  
         6. הפרויקט מדגים תהליך end-to-end מלא: Data → EDA → Models → GridSearch → App  
         """)
+
+
+
+
+
+
+
+
 
 
