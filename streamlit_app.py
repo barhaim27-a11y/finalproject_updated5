@@ -197,6 +197,37 @@ with tab1:
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
 
+    st.subheader("Dataset Info & Statistics")
+    st.write(f"🔹 Rows: {df.shape[0]}, Columns: {df.shape[1]}")
+    missing = df.isnull().sum()
+    if missing.sum() > 0:
+        st.warning("Missing Values detected:")
+        st.dataframe(missing[missing > 0])
+    else:
+        st.success("No missing values ✅")
+    st.dataframe(df.describe().T)
+    st.table(y.value_counts().rename({0:"Healthy",1:"Parkinson’s"}))
+
+    st.write("🔹 Top Features Correlated with Target")
+    corr_target = df.corr()["status"].abs().sort_values(ascending=False)[1:6]
+    st.table(corr_target)
+
+    st.subheader("Exploratory Plots")
+    eda_dir = "eda"
+    eda_plots = {
+        "Target Distribution (Count & Pie)": "target_distribution_combo.png",
+        "Correlation Heatmap": "corr_heatmap.png",
+        "Pairplot of Top Features": "pairplot_top_features.png",
+        "Histograms & Violin Plots": "distributions_violin.png",
+        "PCA Projection": "pca.png",
+        "t-SNE Projection": "tsne.png"
+    }
+    for title, filename in eda_plots.items():
+        path = os.path.join(eda_dir, filename)
+        if os.path.exists(path):
+            with st.expander(title, expanded=False):
+                st.image(path, use_column_width=True)
+
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
         הדאטה שלנו מגיע מ־**UCI Parkinson’s Dataset** – מאגר מחקרי מבוסס ומוכר.  
@@ -228,37 +259,6 @@ with tab1:
 
         👉 **מסקנה:** למרות גודל הדאטה הקטן, הסיגנל חזק מאוד – מה שאפשר לנו להמשיך בביטחון לבניית מודלים.
         """)
-
-    st.subheader("Dataset Info & Statistics")
-    st.write(f"🔹 Rows: {df.shape[0]}, Columns: {df.shape[1]}")
-    missing = df.isnull().sum()
-    if missing.sum() > 0:
-        st.warning("Missing Values detected:")
-        st.dataframe(missing[missing > 0])
-    else:
-        st.success("No missing values ✅")
-    st.dataframe(df.describe().T)
-    st.table(y.value_counts().rename({0:"Healthy",1:"Parkinson’s"}))
-
-    st.write("🔹 Top Features Correlated with Target")
-    corr_target = df.corr()["status"].abs().sort_values(ascending=False)[1:6]
-    st.table(corr_target)
-
-    st.subheader("Exploratory Plots")
-    eda_dir = "eda"
-    eda_plots = {
-        "Target Distribution (Count & Pie)": "target_distribution_combo.png",
-        "Correlation Heatmap": "corr_heatmap.png",
-        "Pairplot of Top Features": "pairplot_top_features.png",
-        "Histograms & Violin Plots": "distributions_violin.png",
-        "PCA Projection": "pca.png",
-        "t-SNE Projection": "tsne.png"
-    }
-    for title, filename in eda_plots.items():
-        path = os.path.join(eda_dir, filename)
-        if os.path.exists(path):
-            with st.expander(title, expanded=False):
-                st.image(path, use_column_width=True) 
 
 
     
