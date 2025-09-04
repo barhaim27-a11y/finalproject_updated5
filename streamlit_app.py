@@ -277,6 +277,13 @@ with tab1:
 # --- Tab 2: Dashboard         
 with tab_dash:
     st.header("📈 Interactive Dashboard – Compare Models")
+    st.header("📈 Dashboard")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        בלשונית זו מוצג לוח מחוונים אינטראקטיבי עם מדדים מרכזיים.  
+        כאן ניתן לעקוב אחרי ביצועי המודלים, לראות KPI’s וגרפים מסכמים 
+        בצורה מרוכזת ונוחה.
+        """)
 
     # --- בחירת מודלים ---
     model_options = [
@@ -549,6 +556,13 @@ with tab_dash:
 # --- Tab 3: Models
 with tab2:
     st.header("🤖 Model Training & Comparison")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        כאן מוצגים כל המודלים שאימנו: Logistic Regression, Random Forest, XGBoost, 
+        SVM, Neural Network.  
+        ניתן להשוות ביניהם באמצעות טבלת דירוג (Leaderboard) וגרפים (ROC, PR).
+        """)
+
     df_metrics = pd.DataFrame(metrics).T.reset_index().rename(columns={"index": "Model"})
     df_metrics = df_metrics.sort_values("roc_auc", ascending=False).reset_index(drop=True)
     df_metrics.insert(0, "Rank", df_metrics.index + 1)
@@ -684,6 +698,13 @@ with tab2:
 # --- Tab 4: Prediction
 with tab3:
     st.header("🔮 Prediction")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        כאן ניתן לבצע חיזוי בפועל:  
+        - הזנת נתונים ידנית (טפסים)  
+        - העלאת קובץ CSV  
+        תקבלו תחזית האם האדם חולה או בריא, כולל הסתברות.
+        """)
     threshold = st.slider("Decision Threshold", 0.0, 1.0, threshold_global, 0.01)
     
     option = st.radio("Choose input type:", ["Manual Input","Upload CSV/Excel"])
@@ -780,6 +801,16 @@ with tab3:
 # --- Tab 5: Test Evaluation
 with tab5:
     st.header("🧪 Model Evaluation on External Test Set")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        כאן מוצגים התוצאות והביצועים של המודל על סט הבדיקה.  
+        גרפים עיקריים:
+        - ROC Curve  
+        - Confusion Matrix  
+        - Precision-Recall Curve  
+
+        המטרה: להעריך עד כמה המודל באמת טוב על נתונים שלא ראה.
+        """)
 
     file = st.file_uploader("Upload Test Set (CSV with 'status' column)", type=["csv"], key="testset")
     if file:
@@ -844,6 +875,16 @@ with tab5:
 # --- Tab 6: Train New Model
 with tab4:
     st.header("⚡ Train New Model")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        בלשונית זו תוכלו לאמן מחדש מודל על הנתונים הקיימים.  
+        - בחירת אלגוריתם  
+        - כוונון פרמטרים (Grid Search)  
+        - הפעלת אימון מחדש  
+
+        המטרה: לשפר ביצועים או להתנסות במודלים נוספים.
+        """)
+
 
     st.markdown("העלה דאטה חדש לאימון, בחר מודלים והגדר פרמטרים – נבצע השוואה מול המודל הנוכחי הטוב ביותר.")
 
@@ -1090,6 +1131,18 @@ with tab4:
 # --- Tab 7: Model History
 with tab_hist:
     st.header("🕑 Model History")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        כאן מופיע יומן ההיסטוריה של כל המודלים שאומנו עד כה.  
+        תוכלו לראות:
+        - אילו מודלים נבנו  
+        - מתי  
+        - באילו פרמטרים  
+        - מה היו התוצאות שלהם  
+
+        מטרת הלשונית: לשמור עקיבות וניהול גרסאות של המודלים.
+        """)
+
     hist_file = "assets/model_history.csv"
     if os.path.exists(hist_file):
         hist_df = pd.read_csv(hist_file)
@@ -1106,6 +1159,15 @@ with tab_hist:
 # --- Tab 8: Explain
 with tab_explain:
     st.header("🧠 Model Explainability")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        בלשונית זו ניתן להבין איך המודל קיבל החלטות.  
+        באמצעות **SHAP Values**:
+        - Feature Importance (השפעת כל פיצ'ר)  
+        - SHAP Summary Plot (כיוון ההשפעה על חיזוי חולה/בריא)  
+
+        זהו חלק חשוב בפרויקט רפואי – לדעת "למה" המודל החליט מה שהחליט.
+        """)
 
     try:
         # 🔹 Feature Importance (למודלים שתומכים בזה)
@@ -1187,7 +1249,15 @@ with tab_explain:
 # --- Tab 9: About
 with tab_about:
     st.header("📖 דו\"ח סופי – פרויקט חיזוי מחלת פרקינסון")
+    with st.expander("ℹ️ מה תמצאו כאן?"):
+        st.markdown("""
+        בלשונית זו תמצאו את הדו\"ח המלא של הפרויקט – כולל הסברים מפורטים על 
+        כל שלב (EDA, בחירת פיצ'רים, מודלים, גרפים, Grid Search, Explainability) 
+        והמסקנות הסופיות.  
 
+        לחצו על כל כותרת כדי להעמיק בפרטים.
+        """)
+        
     with st.expander("🔹 הקדמה"):
         st.markdown("""
         מחלת פרקינסון היא מחלה נוירולוגית מתקדמת המשפיעה על התנועה, 
