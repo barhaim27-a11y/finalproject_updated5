@@ -649,8 +649,6 @@ with tab2:
                            file_name="report.pdf", mime="application/pdf")
         
     st.header("📈 Graphs & Insights")
-        
-    st.header("Models Results Explanation")
     with st.expander("🟦 Confusion Matrix"):
         st.markdown("""
         - **XGBoost:** כמעט ולא פספס חולים אמיתיים (מעט מאוד False Negatives).  
