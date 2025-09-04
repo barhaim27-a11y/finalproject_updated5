@@ -277,7 +277,6 @@ with tab1:
 # --- Tab 2: Dashboard         
 with tab_dash:
     st.header("📈 Interactive Dashboard – Compare Models")
-    st.header("📈 Dashboard")
     with st.expander("ℹ️ מה תמצאו כאן?"):
         st.markdown("""
         בלשונית זו מוצג לוח מחוונים אינטראקטיבי עם מדדים מרכזיים.  
