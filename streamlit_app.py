@@ -646,8 +646,9 @@ with tab2:
         
         c.save()
         st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
-                           file_name="report.pdf", mime="application/pdf") 
-        st.header("📈 Graphs & Insights")
+                           file_name="report.pdf", mime="application/pdf")
+        
+    st.header("📈 Graphs & Insights")
         
     st.header("Models Results Explanation")
     with st.expander("🟦 Confusion Matrix"):
@@ -657,23 +658,23 @@ with tab2:
         📌 רפואית: עדיף שיהיו False Positives מאשר לפספס חולה אמיתי.  
         """)
             
-        with st.expander("📉 ROC Curves"):
-            st.markdown("""
-            - **Boosting Models (XGBoost, LightGBM, CatBoost):** עקומות חדות מאוד, AUC גבוה.  
-            - **Logistic Regression:** פחות מדויק, קרוב יותר לאלכסון.  
-            """)
+    with st.expander("📉 ROC Curves"):
+        st.markdown("""
+        - **Boosting Models (XGBoost, LightGBM, CatBoost):** עקומות חדות מאוד, AUC גבוה.  
+        - **Logistic Regression:** פחות מדויק, קרוב יותר לאלכסון.  
+        """)
                 
-        with st.expander("📊 Precision-Recall Curves"):
-            st.markdown("""
-            - **Boosting:** שמרו על Precision גבוה גם כאשר Recall עלה.  
-            - **KNN:** קרס במהירות → לא שמר על איזון.
-            """)
+    with st.expander("📊 Precision-Recall Curves"):
+        st.markdown("""
+        - **Boosting:** שמרו על Precision גבוה גם כאשר Recall עלה.  
+        - **KNN:** קרס במהירות → לא שמר על איזון.
+        """)
                 
-        with st.expander("📈 Learning Curve"):
-            st.markdown("""
-            - **XGBoost:** מתכנס בצורה יציבה, ללא Overfitting חמור.  
-            - **NeuralNet:** תנודתי מאוד, רגיש לגודל הדאטה הקטן.  
-            """)
+    with st.expander("📈 Learning Curve"):
+        st.markdown("""
+        - **XGBoost:** מתכנס בצורה יציבה, ללא Overfitting חמור.  
+        - **NeuralNet:** תנודתי מאוד, רגיש לגודל הדאטה הקטן.  
+        """)
 
 # --- Tab 4: Prediction
 with tab3:
