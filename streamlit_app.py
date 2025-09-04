@@ -179,7 +179,7 @@ st.sidebar.markdown(f"🕒 **Model Last Updated:** {last_updated}")
 # ==============================
 # Tabs
 # ==============================
-tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about = st.tabs([
+tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about,tab_10 = st.tabs([
     "📊 Data & EDA", 
     "📈 Dashboard",
     "🤖 Models", 
@@ -189,6 +189,7 @@ tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about = st.ta
     "🕑 Model History",
     "🧠 Explainability",
     "ℹ️ About"
+    "❓ Q&A"
 ])
 
 # --- Tab 1: Data & EDA ---
@@ -1433,6 +1434,61 @@ with tab_about:
         - XGBoost היה הכי מאוזן ולכן נבחר כמודל המוביל.  
         - ההסברים של SHAP תאמו ידע קליני → מה שמעלה את האמון במערכת.  
         """)
+
+# --- Tab 10: Q&A
+tab_qa, = st.tabs(["❓ Q&A"])
+
+with tab_qa:
+    st.header("❓ שאלות ותשובות נפוצות על הפרויקט")
+
+    # --- על הנתונים ---
+    with st.expander("📊 מאיפה הגיעו הנתונים ואיך נאספו?"):
+        st.markdown("הנתונים נאספו מה-UCI Machine Learning Repository, על בסיס הקלטות קול של חולי פרקינסון ובריאים.")
+    with st.expander("📊 למה דווקא קול ולא נתונים אחרים?"):
+        st.markdown("קול הוא כלי לא פולשני, פשוט וזול לאיסוף, שיכול לשמש כסקר ראשוני לגילוי מוקדם.")
+
+    # --- על הפיצ'רים ---
+    with st.expander("🔑 מה זה פיצ’ר?"):
+        st.markdown("פיצ’ר הוא מאפיין מספרי שמתאר את הקול, למשל jitter (רעידות בתדר) או shimmer (חוסר יציבות בעוצמה).")
+    with st.expander("🔑 באילו פיצ’רים השתמשתם בפועל?"):
+        st.markdown("שילבנו פיצ’רים בסיסיים וברורים להסבר (jitter, shimmer, Fo) עם פיצ’רים מחושבים חזקים סטטיסטית (Spread1, PPE, Spread2).")
+
+    # --- על המודלים ---
+    with st.expander("🤖 למה בחרתם את המודלים האלו?"):
+        st.markdown("כדי לכסות גם מודלים פשוטים שקל להסביר (Logistic Regression) וגם מתקדמים עם ביצועים גבוהים (XGBoost, Neural Network).")
+    with st.expander("🤖 מה היתרונות והחסרונות של XGBoost?"):
+        st.markdown("יתרון – הכי מדויק ומאוזן (ROC-AUC = 0.94). חסרון – קשה להסבר ודורש יותר משאבים.")
+    with st.expander("🤖 למה לא רשתות עמוקות יותר?"):
+        st.markdown("כמות הנתונים קטנה יחסית, ורשתות עמוקות דורשות הרבה דאטה כדי להיות יציבות.")
+
+    # --- על התוצאות ---
+    with st.expander("📈 מה המדד הכי חשוב בפרויקט?"):
+        st.markdown("Recall – כדי לא לפספס חולים אמיתיים.")
+    with st.expander("📈 מה המשמעות של ROC-AUC = 0.94?"):
+        st.markdown("המודל יודע להבדיל בין חולים לבריאים ברמה של 94%.")
+    with st.expander("📈 מה מצאנו ב-Confusion Matrix?"):
+        st.markdown("ב-XGBoost מתוך 60 דגימות: 27 חולים זוהו נכון, 27 בריאים זוהו נכון, וטעינו רק ב-6 מקרים.")
+
+    # --- על Explainability ---
+    with st.expander("🧠 למה חשוב להסביר את המודל?"):
+        st.markdown("ברפואה חייבים להבין למה התקבלה תחזית – אחרת אין אמון במערכת.")
+    with st.expander("🧠 מה מצאנו ב-SHAP?"):
+        st.markdown("jitter ו-shimmer היו הפיצ’רים המשפיעים ביותר. jitter גבוה → חיזוי 'חולה', jitter נמוך → חיזוי 'בריא'.")
+
+    # --- על ההשלכות הרפואיות ---
+    with st.expander("🏥 האם המודל הזה יכול לשמש לאבחון רפואי?"):
+        st.markdown("כרגע לא – זה כלי מחקרי בלבד. כדי להשתמש בו ברפואה צריך מחקר קליני רחב ואישור רגולטורי.")
+    with st.expander("🏥 מה היתרון של שימוש בקול על פני בדיקות אחרות?"):
+        st.markdown("קול הוא פשוט, זול ולא פולשני. ניתן למדוד אותו גם מרחוק ובאופן תדיר.")
+    with st.expander("🏥 מה הצעד הבא?"):
+        st.markdown("לאסוף דאטה גדול ומגוון יותר, כולל קבוצות גיל שונות ושפות שונות, כדי לבדוק את המודל בסביבות אמיתיות.")
+
+    # --- שאלות קשות ---
+    with st.expander("⚖️ למה בחרתם ב-XGBoost ולא ב-Neural Network?"):
+        st.markdown("כי XGBoost היה יציב יותר, קל יותר להסביר עם SHAP, ונתן ביצועים מאוזנים יותר.")
+    with st.expander("⚖️ אם היה לכם עוד זמן – מה הייתם משפרים?"):
+        st.markdown("היינו מוסיפים דאטה, בודקים רשתות עמוקות יותר, ומבצעים Cross-Validation נרחב יותר.")
+
 
 
 
