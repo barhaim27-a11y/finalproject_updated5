@@ -628,52 +628,52 @@ with tab2:
     fig.add_trace(go.Scatter(x=thresholds, y=fpr, mode="lines", name="FPR"))
     fig.update_layout(title=f"KS Curve (KS={ks_stat:.2f})", xaxis_title="Threshold", yaxis_title="Rate")
     st.plotly_chart(fig, use_container_width=True)
-import io
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-
-if st.button("📄 Download Full Report (PDF)"):
-    pdf_buffer = io.BytesIO()
-    c = canvas.Canvas(pdf_buffer, pagesize=letter)
-    c.setFont("Helvetica", 14)
-    c.drawString(50, 750, "Parkinson’s ML Report")
-
-    c.setFont("Helvetica", 10)
-    c.drawString(50, 720, f"Last Updated: {last_updated}")
-    c.drawString(50, 700, f"Best Model: {best_name}")
-    c.drawString(50, 680, f"Metrics: {json.dumps(metrics[best_name], indent=2)}")
-
-    c.save()
-    st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
-                       file_name="report.pdf", mime="application/pdf") 
-    st.header("📈 Graphs & Insights")
     
-    st.header("Models Results Explanation")
-    with st.expander("🟦 Confusion Matrix"):
-        st.markdown("""
-        - **XGBoost:** כמעט ולא פספס חולים אמיתיים (מעט מאוד False Negatives).  
-        - **Logistic Regression:** הרבה False Positives (התרעות שווא).  
-        📌 רפואית: עדיף שיהיו False Positives מאשר לפספס חולה אמיתי.  
-        """)
-
-    with st.expander("📉 ROC Curves"):
-        st.markdown("""
-        - **Boosting Models (XGBoost, LightGBM, CatBoost):** עקומות חדות מאוד, AUC גבוה.  
-        - **Logistic Regression:** פחות מדויק, קרוב יותר לאלכסון.  
-        """)
-
-    with st.expander("📊 Precision-Recall Curves"):
-        st.markdown("""
-        - **Boosting:** שמרו על Precision גבוה גם כאשר Recall עלה.  
-        - **KNN:** קרס במהירות → לא שמר על איזון.  
-        """)
-
-    with st.expander("📈 Learning Curve"):
-        st.markdown("""
-        - **XGBoost:** מתכנס בצורה יציבה, ללא Overfitting חמור.  
-        - **NeuralNet:** תנודתי מאוד, רגיש לגודל הדאטה הקטן.  
-        """)
-
+    import io
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+    
+    if st.button("📄 Download Full Report (PDF)"):
+        pdf_buffer = io.BytesIO()
+        c = canvas.Canvas(pdf_buffer, pagesize=letter)
+        c.setFont("Helvetica", 14)
+        c.drawString(50, 750, "Parkinson’s ML Report")
+        
+        c.setFont("Helvetica", 10)
+        c.drawString(50, 720, f"Last Updated: {last_updated}")
+        c.drawString(50, 700, f"Best Model: {best_name}")
+        c.drawString(50, 680, f"Metrics: {json.dumps(metrics[best_name], indent=2)}")
+        
+        c.save()
+        st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
+                           file_name="report.pdf", mime="application/pdf") 
+        st.header("📈 Graphs & Insights")
+        
+        st.header("Models Results Explanation")
+        with st.expander("🟦 Confusion Matrix"):
+            st.markdown("""
+            - **XGBoost:** כמעט ולא פספס חולים אמיתיים (מעט מאוד False Negatives).  
+            - **Logistic Regression:** הרבה False Positives (התרעות שווא).  
+            📌 רפואית: עדיף שיהיו False Positives מאשר לפספס חולה אמיתי.  
+            """)
+            
+            with st.expander("📉 ROC Curves"):
+                st.markdown("""
+                - **Boosting Models (XGBoost, LightGBM, CatBoost):** עקומות חדות מאוד, AUC גבוה.  
+                - **Logistic Regression:** פחות מדויק, קרוב יותר לאלכסון.  
+                """)
+                
+            with st.expander("📊 Precision-Recall Curves"):
+                st.markdown("""
+                - **Boosting:** שמרו על Precision גבוה גם כאשר Recall עלה.  
+                - **KNN:** קרס במהירות → לא שמר על איזון.
+                """)
+                
+            with st.expander("📈 Learning Curve"):
+                st.markdown("""
+                - **XGBoost:** מתכנס בצורה יציבה, ללא Overfitting חמור.  
+                - **NeuralNet:** תנודתי מאוד, רגיש לגודל הדאטה הקטן.  
+                """)
 
 # --- Tab 4: Prediction
 with tab3:
