@@ -647,7 +647,7 @@ if st.button("📄 Download Full Report (PDF)"):
     c.save()
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
                        file_name="report.pdf", mime="application/pdf") 
-        st.header("📈 Graphs & Insights")
+    st.header("📈 Graphs & Insights")
 
     with st.expander("🟦 Confusion Matrix"):
         st.markdown("""
