@@ -550,26 +550,6 @@ with tab_dash:
         fig.add_trace(go.Scatter(x=[0,1], y=[0,1], mode="lines", line=dict(dash="dash"), name="Random"))
         st.plotly_chart(fig, use_container_width=True)
         st.pyplot(roc_fig)
-        
-        with st.expander("🔎 הסבר על ROC Curve"):
-            st.markdown("""
-            ROC Curve בודק עד כמה המודל יודע להפריד בין חולים לבריאים.
-            
-            **מה זה ROC-AUC?**  
-            - שטח מתחת לעקומה (AUC) בין 0 ל-1.  
-            - 0.5 = ניחוש אקראי.  
-            - 1.0 = הפרדה מושלמת.
-            
-            **מה מצאנו?**  
-            - Logistic Regression → ROC-AUC = 0.86.  
-            - Random Forest → ROC-AUC = 0.92.  
-            - XGBoost → ROC-AUC = 0.94 (הטוב ביותר).  
-          
-            **מסקנה:**  
-            XGBoost היה המודל המדויק ביותר להפרדת חולים ובריאים.
-            """)
-
-
 
         # --- Precision-Recall Curves ---
         st.subheader("Precision-Recall Curves")
@@ -580,25 +560,6 @@ with tab_dash:
             fig.add_trace(go.Scatter(x=rec, y=prec, mode="lines", name=m))
             st.plotly_chart(fig, use_container_width=True) 
             st.header("🤖 Models & Results")
-       
-        
-        with st.expander("🔎 הסבר על Precision-Recall Curve"):
-            st.markdown("""
-            גרף זה בודק איזון בין **דיוק (Precision)** ליכולת תפיסה (**Recall**).
-            
-            **מה חשוב ברפואה?**  
-            Recall גבוה → לא לפספס חולים אמיתיים.  
-            Precision גבוה → לא לסמן יותר מדי בריאים כחולים.
-            
-            **מה מצאנו?**  
-            - Random Forest הצטיין ב-Recall (91%) → כמעט לא פספס חולים.  
-            - XGBoost נתן איזון טוב (Recall 90%, Precision גבוה).  
-            - Logistic Regression היה חלש יותר בשניהם.
-            
-            **מסקנה:**  
-            XGBoost נתן את האיזון האופטימלי → גם מדויק וגם לא מפספס חולים.
-            """)
-
             
     st.header("Models Explanation")
     with st.expander("📌 Logistic Regression"):
