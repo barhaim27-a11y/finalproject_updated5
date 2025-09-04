@@ -191,22 +191,25 @@ tab1, tab_dash, tab2, tab3, tab5, tab4, tab_hist, tab_explain, tab_about = st.ta
     "ℹ️ About"
 ])
 
-# --- Tab 1: Data & EDA
+# --- Tab 1: Data & EDA ---
 with tab1:
     st.header("📊 Data & Exploratory Data Analysis")
+
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
 
     st.subheader("Dataset Info & Statistics")
     st.write(f"🔹 Rows: {df.shape[0]}, Columns: {df.shape[1]}")
+
     missing = df.isnull().sum()
     if missing.sum() > 0:
         st.warning("Missing Values detected:")
         st.dataframe(missing[missing > 0])
     else:
         st.success("No missing values ✅")
+
     st.dataframe(df.describe().T)
-    st.table(y.value_counts().rename({0:"Healthy",1:"Parkinson’s"}))
+    st.table(y.value_counts().rename({0: "Healthy", 1: "Parkinson’s"}))
 
     st.write("🔹 Top Features Correlated with Target")
     corr_target = df.corr()["status"].abs().sort_values(ascending=False)[1:6]
@@ -222,12 +225,14 @@ with tab1:
         "PCA Projection": "pca.png",
         "t-SNE Projection": "tsne.png"
     }
+
     for title, filename in eda_plots.items():
         path = os.path.join(eda_dir, filename)
         if os.path.exists(path):
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True)
 
+    # 📌 הסברים טקסטואליים
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
         הדאטה שלנו מגיע מ־**UCI Parkinson’s Dataset** – מאגר מחקרי מבוסס ומוכר.  
@@ -259,7 +264,6 @@ with tab1:
 
         👉 **מסקנה:** למרות גודל הדאטה הקטן, הסיגנל חזק מאוד – מה שאפשר לנו להמשיך בביטחון לבניית מודלים.
         """)
-
 
     
     
