@@ -233,6 +233,7 @@ with tab1:
                 st.image(path, use_column_width=True)
 
     # 📌 הסברים טקסטואליים
+    st.header("📊 Data & Exploratory Data Analysis - Explanation")
     with st.expander("📂 Dataset Overview"):
         st.markdown("""
         הדאטה שלנו מגיע מ־**UCI Parkinson’s Dataset** – מאגר מחקרי מבוסס ומוכר.  
@@ -475,7 +476,8 @@ with tab_dash:
             fig.add_trace(go.Scatter(x=rec, y=prec, mode="lines", name=m))
             st.plotly_chart(fig, use_container_width=True) 
             st.header("🤖 Models & Results")
-
+            
+    st.header("Models Explanation")
     with st.expander("📌 Logistic Regression"):
         st.markdown("""
         מודל ליניארי פשוט שמשמש כקו בסיס.  
@@ -535,9 +537,6 @@ with tab_dash:
         - **תוצאה:** ROC-AUC ≈ 0.87.  
         - **בעיה:** דאטה קטן → רשת לא יציבה ולא עקפה boosting.  
         """)
-        
-
-
         
 
 # --- Tab 3: Models
@@ -648,7 +647,8 @@ if st.button("📄 Download Full Report (PDF)"):
     st.download_button("📥 Download Report PDF", pdf_buffer.getvalue(),
                        file_name="report.pdf", mime="application/pdf") 
     st.header("📈 Graphs & Insights")
-
+    
+    st.header("Models Results Explanation")
     with st.expander("🟦 Confusion Matrix"):
         st.markdown("""
         - **XGBoost:** כמעט ולא פספס חולים אמיתיים (מעט מאוד False Negatives).  
@@ -1149,6 +1149,7 @@ with tab_explain:
                 st.warning(f"Explainability not available: {e}")  
             st.header("🔎 Explainability (SHAP)")
 
+    st.header("🔎 Explainability (SHAP)")
     with st.expander("ℹ️ מה זה Explainability?"):
         st.markdown("""
         תחום הבוחן איך מודלים מקבלים החלטות.  
@@ -1219,8 +1220,8 @@ with tab_about:
 
     👨‍💻 Developed by: *Your Name*  
     """)
+    
     st.header("🚀 Conclusions")
-
     with st.expander("📌 מסקנות סופיות"):
         st.markdown("""
         1. ניתן לחזות פרקינסון בדיוק גבוה מאוד (AUC≈0.94) גם עם דאטה קטן.  
