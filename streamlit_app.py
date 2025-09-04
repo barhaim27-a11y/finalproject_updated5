@@ -228,6 +228,41 @@ with tab1:
             with st.expander(title, expanded=False):
                 st.image(path, use_column_width=True)
 
+with tab1:
+    st.header("📊 Data & EDA")
+
+    with st.expander("📂 Dataset Overview"):
+        st.markdown("""
+        - **מקור:** UCI Parkinson’s Dataset – דאטה אמין שמבוסס על מחקר קליני.  
+        - **גודל:** 195 דגימות בלבד – כלומר דאטה קטן יחסית למחקר ML.  
+        - **עמודת יעד:** `status` – 0 = בריא, 1 = חולה פרקינסון.  
+        - **בעיה מרכזית:** חוסר איזון – 75% חולים מול 25% בריאים.  
+
+        ⚠️ המשמעות: Accuracy לבדו לא מדד טוב כאן → מודל יכול לנבא "חולה" תמיד ולקבל דיוק גבוה.  
+        לכן נדרשים מדדים נוספים: Recall, Precision, F1, ROC-AUC.
+        """)
+
+    with st.expander("🔎 Key Features"):
+        st.markdown("""
+        - **Jitter** – שונות קטנה בתדר הקול. אצל חולים התדר רועד יותר.  
+        - **Shimmer** – שונות בעוצמת הקול. אצל חולים יש חוסר יציבות גבוה.  
+        - **Fo (Fundamental Frequency)** – התדר הבסיסי של הדיבור. אצל חולים פחות יציב.  
+        - **NHR (Noise-to-Harmonics Ratio)** – מדד לכמות רעש ביחס להרמוניות. אצל חולים הערך גבוה.  
+
+        📌 משתנים אלו ידועים בספרות המדעית כסמנים מוקדמים לפרקינסון – זה נותן אמון באיכות הדאטה.
+        """)
+
+    with st.expander("📊 EDA Findings"):
+        st.markdown("""
+        - **Heatmap:** הראה מתאם גבוה בין jitter/shimmer לסטטוס המחלה.  
+        - **PCA:** בהקרנה ל־2D עדיין ניתן להבדיל בין חולים לבריאים → סימן למידע חזק.  
+        - **t-SNE:** הראה אשכולות ברורים – קבוצה מובחנת של חולים.  
+        - **Violin + Histogram:** jitter ו־shimmer מראים שונות בולטת בין בריאים לחולים.  
+
+        👉 **מסקנה:** אף על פי שמדובר בדאטה קטן, המאפיינים מספקים סיגנל ברור שמאפשר חיזוי אמין.
+        """)
+
+
 # --- Tab 2: Dashboard         
 with tab_dash:
     st.header("📈 Interactive Dashboard – Compare Models")
